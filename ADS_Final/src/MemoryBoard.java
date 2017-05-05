@@ -9,7 +9,7 @@ public class MemoryBoard extends JFrame {
 	 */
 	private static final long serialVersionUID = -6013876123920190103L;
 	private int width, height;
-	private int cardSize = 100;
+	private int cardSize = 75;
 	private JPanel cpuSide, playerSide, center;
 	public MemoryBoard(){
 		super("Memory");
@@ -35,13 +35,17 @@ public class MemoryBoard extends JFrame {
 		this.add(center);
 		this.add(playerSide);
 		
-		cpuSide.setBounds(0, 0, 1200, 169);
-		center.setBounds(0, 168, 1200, 505);
-		center.setBounds(0, 505, 1200, 675);
+		cpuSide.setBounds(0, 0, 1200, 149);
+		center.setBounds(0, 149, 1200, 357);
+		playerSide.setBounds(0, 506, 1200, 169);
 		
 		cpuSide.setBackground(Color.DARK_GRAY);
 		center.setBackground(Color.GRAY);
-		playerSide.setBackground(Color.white);
+		playerSide.setBackground(Color.WHITE);
+		
+		
+		MemoryCard test = new MemoryCard("test");
+		this.addCard(test, 10, 10);
 
 	}
 	

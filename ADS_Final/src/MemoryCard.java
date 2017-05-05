@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,16 +13,15 @@ public class MemoryCard extends JPanel {
 	private ImageIcon front, back;
 	private JLabel display;
 	private int coordX, coordY;
-	public MemoryCard(String t, int x, int y){
+	public MemoryCard(String t){
 		type = t;
 		this.setLayout(null);
 		display = new JLabel();
+		this.add(display);
 		front = new ImageIcon(this.getClass().getResource(type + ".png"));
-		back = new ImageIcon(this.getClass().getResource("Back.png"));
-		display.setIcon(back);
-		display.setBounds(0,0, this.getWidth(), this.getHeight());
-		coordX = x;
-		coordY = y;
+		//back = new ImageIcon(this.getClass().getResource("Back.png"));
+		display.setIcon(front);
+		display.setBounds(0,0, 75, 75);
 	}
 	public int getCoordX() {
 		return coordX;

@@ -13,15 +13,17 @@ public class MemoryCard extends JPanel {
 	private ImageIcon front, back;
 	private JLabel display;
 	private int coordX, coordY;
+	private boolean flipped;
 	public MemoryCard(String t){
 		type = t;
 		this.setLayout(null);
 		display = new JLabel();
 		this.add(display);
 		front = new ImageIcon(this.getClass().getResource(type + ".png"));
-		//back = new ImageIcon(this.getClass().getResource("Back.png"));
-		display.setIcon(front);
+		back = new ImageIcon(this.getClass().getResource("back.png"));
+		display.setIcon(back);
 		display.setBounds(0,0, 75, 75);
+		flipped = false;
 	}
 	public int getCoordX() {
 		return coordX;
@@ -59,11 +61,15 @@ public class MemoryCard extends JPanel {
 
 	}
 	public void setFlipped(boolean b){
+		flipped = b;
 		if(b){
-			display.setIcon(back);
-		}
-		else{
 			display.setIcon(front);
 		}
+		else{
+			display.setIcon(back);
+		}
+	}
+	public boolean isFlipped(){
+		return flipped;
 	}
 }

@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,10 +10,10 @@ public class MemoryBoard extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -6013876123920190103L;
-	private int width, height;
+	private int width, height, cardsFlipped;
 	private int cardSize = 75;
 	private JPanel cpuSide, playerSide, center;
-
+	private boolean playerCanMove;
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -43,6 +45,9 @@ public class MemoryBoard extends JFrame {
 		center.setBackground(Color.GRAY);
 		playerSide.setBackground(Color.WHITE);
 
+		playerCanMove = true;
+		cardsFlipped = 0;
+		
 		for (int i = 0; i < 12; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.addCard(new MemoryCard("test"), i, j);
@@ -56,6 +61,25 @@ public class MemoryBoard extends JFrame {
 		center.add(m);
 		m.setBounds((x * 95) + 10, (y * 95) + 10, cardSize, cardSize);
 		m.updatePos(x, y);
+		m.addMouseListener(new CardClick(m));
+	}
+	
+	
+	private class CardClick extends MouseAdapter{
+		private MemoryCard myCard;
+		public CardClick(MemoryCard m){
+			myCard = m;
+		}
+		@Override
+		public void mousePressed(MouseEvent e){
+			if(playerCanMove && !myCard.isFlipped()){
+				myCard.setFlipped(true);
+				cardsFlipped++;
+				if(cardsFlipped == 2){
+					playerCanMove = false;
+				}
+			}
+		}
 	}
 
 }

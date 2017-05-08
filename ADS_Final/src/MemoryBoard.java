@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -14,6 +15,7 @@ public class MemoryBoard extends JFrame {
 	private int cardSize = 75;
 	private JPanel cpuSide, playerSide, center;
 	private boolean playerCanMove;
+	private HashMap<String, MemoryCard> cards;
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -51,7 +53,7 @@ public class MemoryBoard extends JFrame {
 		for (int i = 0; i < 12; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.addCard(new MemoryCard("test"), i, j);
-
+				
 			}
 		}
 
@@ -62,6 +64,7 @@ public class MemoryBoard extends JFrame {
 		m.setBounds((x * 95) + 10, (y * 95) + 10, cardSize, cardSize);
 		m.updatePos(x, y);
 		m.addMouseListener(new CardClick(m));
+		
 	}
 	
 	

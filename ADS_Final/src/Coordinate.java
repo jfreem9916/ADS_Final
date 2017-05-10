@@ -28,4 +28,8 @@ public class Coordinate {
 		Coordinate c = (Coordinate) o;
 		return (c.getX() == x && c.getY() == y);
 	}
+	@Override
+	public String toString(){
+		return x + ", " + y;
+	}
 }

@@ -22,7 +22,7 @@ public class MemoryCard extends JPanel {
 		front = new ImageIcon(this.getClass().getResource(type + ".png"));
 		back = new ImageIcon(this.getClass().getResource("back.png"));
 		display.setIcon(back);
-		display.setBounds(0,0, 75, 75);
+		display.setBounds(0,0, 90, 90);
 		flipped = false;
 	}
 	

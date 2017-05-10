@@ -12,7 +12,6 @@ public class MemoryCard extends JPanel {
 	private String type;
 	private ImageIcon front, back;
 	private JLabel display;
-	private int coordX, coordY;
 	private boolean flipped;
 	public MemoryCard(String t){
 		type = t;
@@ -24,18 +23,6 @@ public class MemoryCard extends JPanel {
 		display.setIcon(back);
 		display.setBounds(0,0, 75, 75);
 		flipped = false;
-	}
-	public int getCoordX() {
-		return coordX;
-	}
-	public void setCoordX(int coordX) {
-		this.coordX = coordX;
-	}
-	public int getCoordY() {
-		return coordY;
-	}
-	public void setCoordY(int coordY) {
-		this.coordY = coordY;
 	}
 	
 	public String getType() {
@@ -50,16 +37,12 @@ public class MemoryCard extends JPanel {
 			return false;
 		}
 		MemoryCard m2 = (MemoryCard) o;
-		if(m2.getCoordX() == this.getCoordX() && m2.getCoordY() == this.getCoordY() && m2.getType().equalsIgnoreCase(this.getType())){
+		if(m2.getBounds().equals(this.getBounds()) && m2.getType().equalsIgnoreCase(this.getType())){
 			return true;
 		}
 		return false;
 	}
-	public void updatePos(int x, int y){
-		this.setCoordX(x);
-		this.setCoordY(y);
 
-	}
 	public void setFlipped(boolean b){
 		flipped = b;
 		if(b){
@@ -71,5 +54,12 @@ public class MemoryCard extends JPanel {
 	}
 	public boolean isFlipped(){
 		return flipped;
+	}
+
+	public boolean matches(MemoryCard memoryCard) {
+		if(memoryCard.getType().equalsIgnoreCase(type)){
+			return true;
+		}
+		return false;
 	}
 }

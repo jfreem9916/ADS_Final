@@ -17,6 +17,9 @@ public class MemoryBoard extends JFrame {
 	/**
 	 * 
 	 */
+	
+	
+	
 	private static final long serialVersionUID = -6013876123920190103L;
 	private int width, height;
 	private int cardSize = 90;
@@ -26,7 +29,8 @@ public class MemoryBoard extends JFrame {
 	private ArrayList<MemoryCard> flippedCards;
 	private int cpuScore, playerScore;
 	private JLabel playerHUD, cpuHUD;
-	private ArrayList<MemoryCard> allCards();
+	private ArrayList<MemoryCard> allCards;
+	private HashMap<Coordinate, MemoryCard> cardMap;
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -77,6 +81,7 @@ public class MemoryBoard extends JFrame {
 
 		allCards = new ArrayList<MemoryCard>();
 		flippedCards = new ArrayList<MemoryCard>();
+		cardMap = new HashMap<Coordinate, MemoryCard>();
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -93,6 +98,8 @@ public class MemoryBoard extends JFrame {
 		center.add(m);
 		m.setBounds((x * 120) + 10, (y * 125) + 10, cardSize, cardSize);
 		m.addMouseListener(new CardClick(m, x, y));
+		allCards.add(m);
+		cardMap.put(new Coordinate(x, y), m);
 	}
 
 	public void removeCardPair(MemoryCard m, MemoryCard m2) {
@@ -142,7 +149,7 @@ public class MemoryBoard extends JFrame {
 						Timer t = new Timer();
 						t.schedule(new FlipTask(), 1000);
 						t.schedule(new ClearTask(), 1010);
-						t.schedule(new CpuTask(), 1020);
+						t.schedule(new CpuTask(), 1500);
 					} else {
 						Timer t = new Timer();
 						t.schedule(new RemoveTask(), 1000);
@@ -178,7 +185,10 @@ public class MemoryBoard extends JFrame {
 	private class CpuTask extends TimerTask {
 		@Override
 		public void run() {
-			//CpuTurn;
+			MemoryCard[] move = cpu.getCpuMove(allCards, cardMap);
+			move[0].setFlipped(true);
+			move[1].setFlipped(true);
+
 		}
 	}
 	private class FlipTask extends TimerTask {

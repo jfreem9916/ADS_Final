@@ -17,4 +17,15 @@ public class Coordinate {
 		this.x = x;
 		this.y = y;
 	}
+	public boolean equalsInts(int x, int y){
+		return this.x == x && this.y == y;
+	}
+	@Override 
+	public boolean equals(Object o){
+		if(!(o instanceof Coordinate)){
+			return false;
+		}
+		Coordinate c = (Coordinate) o;
+		return (c.getX() == x && c.getY() == y);
+	}
 }

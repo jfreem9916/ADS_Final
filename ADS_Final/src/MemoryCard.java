@@ -13,6 +13,7 @@ public class MemoryCard extends JPanel {
 	private ImageIcon front, back;
 	private JLabel display;
 	private boolean flipped;
+	
 	public MemoryCard(String t){
 		type = t;
 		this.setLayout(null);

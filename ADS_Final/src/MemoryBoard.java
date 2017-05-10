@@ -1,9 +1,13 @@
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,7 +25,8 @@ public class MemoryBoard extends JFrame {
 	private CPU cpu;
 	private ArrayList<MemoryCard> flippedCards;
 	private int cpuScore, playerScore;
-	private JLabel playerHUD;
+	private JLabel playerHUD, cpuHUD;
+	private ArrayList<MemoryCard> allCards();
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -57,18 +62,25 @@ public class MemoryBoard extends JFrame {
 		playerSide.setBackground(Color.WHITE);
 
 		playerHUD = new JLabel();
+		cpuHUD = new JLabel();
+		cpuHUD.setForeground(Color.white);
 		
 		playerSide.add(playerHUD);
-		playerHUD.setBounds(0, 0, 300, 30);
+		playerHUD.setBounds(10, 0, 300, 30);
 		playerHUD.setText("Your score: " + playerScore);
+
+		cpuSide.add(cpuHUD);
+		cpuHUD.setBounds(10, 0, 300, 30);
+		cpuHUD.setText("CPU score: " + cpuScore);
 		
 		playerCanMove = true;
 
+		allCards = new ArrayList<MemoryCard>();
 		flippedCards = new ArrayList<MemoryCard>();
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 3; j++) {
-				this.addCard(new MemoryCard("test"), i, j);
+				this.addCard(new MemoryCard("test"+j), i, j);
 
 			}
 		}
@@ -84,32 +96,23 @@ public class MemoryBoard extends JFrame {
 	}
 
 	public void removeCardPair(MemoryCard m, MemoryCard m2) {
-		Component[] comps = center.getComponents();
-		for (int i = 0; i < comps.length; i++) {
+		center.remove(m);
+		center.remove(m2);
+		center.repaint();
 
-			if (comps[i] instanceof MemoryCard) {
-				MemoryCard m3 = (MemoryCard) comps[i];
-				if (m3.equals(m) || m3.equals(m2)) {
-					comps[i] = null;
-					i--;
-				}
-			}
-		}
 	}
 
-	public void checkIfMatch(boolean isPlayer) {
+	public boolean checkIfMatch(boolean isPlayer) {
 		if (flippedCards.get(0).matches(flippedCards.get(1))) {
-			removeCardPair(flippedCards.get(0), flippedCards.get(1));
 			if (isPlayer) {
 				playerScore++;
 				playerHUD.setText("Your score: " + playerScore);
 			} else {
 				cpuScore++;
 			}
-		} else {
-
+			return true;
 		}
-		flippedCards.clear();
+		return false;
 	}
 
 	private class CardClick extends MouseAdapter {
@@ -125,13 +128,64 @@ public class MemoryBoard extends JFrame {
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if (playerCanMove && !myCard.isFlipped()) {
+
 				myCard.setFlipped(true);
 				flippedCards.add(myCard);
 				cpu.addCard(myCard, x, y);
+
 				if (flippedCards.size() == 2) {
 					playerCanMove = false;
-					checkIfMatch(true);
+					boolean isMatched = checkIfMatch(true);
+
+					if (!isMatched) {
+						
+						Timer t = new Timer();
+						t.schedule(new FlipTask(), 1000);
+						t.schedule(new ClearTask(), 1010);
+						t.schedule(new CpuTask(), 1020);
+					} else {
+						Timer t = new Timer();
+						t.schedule(new RemoveTask(), 1000);
+						t.schedule(new ClearTask(), 1010);
+						t.schedule(new PlayerTask(), 1020);
+
+					}
+
 				}
+			}
+		}
+	}
+
+	private class RemoveTask extends TimerTask {
+		@Override
+		public void run() {
+			removeCardPair(flippedCards.get(0), flippedCards.get(1));
+		}
+	}
+
+	private class ClearTask extends TimerTask {
+		@Override
+		public void run() {
+			flippedCards.clear();
+		}
+	}
+	private class PlayerTask extends TimerTask {
+		@Override
+		public void run() {
+			playerCanMove = true;
+		}
+	}
+	private class CpuTask extends TimerTask {
+		@Override
+		public void run() {
+			//CpuTurn;
+		}
+	}
+	private class FlipTask extends TimerTask {
+		@Override
+		public void run() {
+			for (MemoryCard c : flippedCards) {
+				c.setFlipped(false);
 			}
 		}
 	}

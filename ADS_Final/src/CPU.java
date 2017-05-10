@@ -16,4 +16,8 @@ public class CPU {
 			knownCards.put(m, new Coordinate(x,y));
 		}
 	}
+	
+	public Coordinate[] getCpuMove(){
+		
+	}
 }

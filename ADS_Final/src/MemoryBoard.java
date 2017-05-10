@@ -12,7 +12,7 @@ public class MemoryBoard extends JFrame {
 	 */
 	private static final long serialVersionUID = -6013876123920190103L;
 	private int width, height, cardsFlipped;
-	private int cardSize = 75;
+	private int cardSize = 90;
 	private JPanel cpuSide, playerSide, center;
 	private boolean playerCanMove;
 	private HashMap<String, MemoryCard> cards;
@@ -50,7 +50,7 @@ public class MemoryBoard extends JFrame {
 		playerCanMove = true;
 		cardsFlipped = 0;
 		
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 3; j++) {
 				this.addCard(new MemoryCard("test"), i, j);
 				
@@ -61,7 +61,7 @@ public class MemoryBoard extends JFrame {
 
 	public void addCard(MemoryCard m, int x, int y) {
 		center.add(m);
-		m.setBounds((x * 95) + 10, (y * 95) + 10, cardSize, cardSize);
+		m.setBounds((x * 120) + 10, (y * 125) + 10, cardSize, cardSize);
 		m.updatePos(x, y);
 		m.addMouseListener(new CardClick(m));
 		

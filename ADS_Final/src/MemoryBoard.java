@@ -1,7 +1,5 @@
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -28,11 +25,10 @@ public class MemoryBoard extends JFrame {
 	private CPU cpu;
 	private ArrayList<MemoryCard> flippedCards;
 	private int playerScore;
-	private JLabel playerHUD, cpuHUD;
 	private ArrayList<MemoryCard> allCards;
 	private HashMap<Coordinate, MemoryCard> cardMap;
 	private ArrayList<Coordinate> coords;
-
+	private HUD h;
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -61,10 +57,11 @@ public class MemoryBoard extends JFrame {
 		center.setLayout(null);
 		playerSide.setLayout(null);
 
+		h = new HUD(playerScore, cpu.getScore());
+		
 		this.add(cpuSide);
 		this.add(center);
 		this.add(playerSide);
-
 		cpuSide.setBounds(0, 0, 1200, 149);
 		center.setBounds(0, 149, 1200, 357);
 		playerSide.setBounds(0, 506, 1200, 169);
@@ -73,17 +70,6 @@ public class MemoryBoard extends JFrame {
 		center.setBackground(Color.GRAY);
 		playerSide.setBackground(Color.WHITE);
 
-		playerHUD = new JLabel();
-		cpuHUD = new JLabel();
-		cpuHUD.setForeground(Color.white);
-
-		playerSide.add(playerHUD);
-		playerHUD.setBounds(10, 0, 300, 30);
-		playerHUD.setText("Your score: " + playerScore);
-
-		cpuSide.add(cpuHUD);
-		cpuHUD.setBounds(10, 0, 300, 30);
-		cpuHUD.setText("CPU score: " + cpu.getScore());
 
 		playerCanMove = true;
 
@@ -176,10 +162,10 @@ public class MemoryBoard extends JFrame {
 		if (flippedCards.get(0).matches(flippedCards.get(1))) {
 			if (isPlayer) {
 				playerScore++;
-				playerHUD.setText("Your score: " + playerScore);
+				h.updatePlayerScore(playerScore);
 			} else {
 				cpu.incScore();
-				cpuHUD.setText("CPU score: " + cpu.getScore());
+				h.updateCPUScore(cpu.getScore());
 			}
 			return true;
 		}

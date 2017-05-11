@@ -116,7 +116,91 @@ public class MemoryBoard extends JFrame {
 		}
 
 	}
+	public MemoryBoard(String name){
+		super(name);
+		this.setResizable(false);
+		width = 1200;
+		height = 675;
+		this.setSize(width, height);
+		this.setLayout(null);
+		this.setLocation((1600 - width) / 2, (900 - height) / 2);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+		String AI = JOptionPane.showInputDialog("Advanced AI(Y/N)?:");
+		if (AI != null && AI.trim().equalsIgnoreCase("Y")) {
+			cpu = new AdvCPU();
+		} else {
+			cpu = new CPU();
+		}
 
+		playerScore = 0;
+
+		cpuSide = new Side();
+		center = new JPanel();
+		playerSide = new Side();
+
+		center.setLayout(null);
+
+		h = new HUD(playerScore, cpu.getScore());
+
+		this.add(cpuSide);
+		this.add(center);
+		this.add(playerSide);
+		cpuSide.setBounds(0, 0, 1200, 149);
+		center.setBounds(0, 149, 1200, 357);
+		playerSide.setBounds(0, 506, 1200, 169);
+
+		center.setBackground(Color.GRAY);
+
+		playerCanMove = true;
+
+		allCards = new ArrayList<MemoryCard>();
+		flippedCards = new ArrayList<MemoryCard>();
+		cardMap = new HashMap<Coordinate, MemoryCard>();
+		coords = new ArrayList<Coordinate>();
+
+		ArrayList<MemoryCard> initialCards = new ArrayList<MemoryCard>();
+		initialCards.add(new MemoryCard("red"));
+		initialCards.add(new MemoryCard("red"));
+		initialCards.add(new MemoryCard("green"));
+		initialCards.add(new MemoryCard("green"));
+		initialCards.add(new MemoryCard("blue"));
+		initialCards.add(new MemoryCard("blue"));
+		initialCards.add(new MemoryCard("brown"));
+		initialCards.add(new MemoryCard("brown"));
+		initialCards.add(new MemoryCard("cyan"));
+		initialCards.add(new MemoryCard("cyan"));
+		initialCards.add(new MemoryCard("darkgreen"));
+		initialCards.add(new MemoryCard("darkgreen"));
+		initialCards.add(new MemoryCard("lilac"));
+		initialCards.add(new MemoryCard("lilac"));
+		initialCards.add(new MemoryCard("maroon"));
+		initialCards.add(new MemoryCard("maroon"));
+		initialCards.add(new MemoryCard("navy"));
+		initialCards.add(new MemoryCard("navy"));
+		initialCards.add(new MemoryCard("orange"));
+		initialCards.add(new MemoryCard("orange"));
+		initialCards.add(new MemoryCard("pink"));
+		initialCards.add(new MemoryCard("pink"));
+		initialCards.add(new MemoryCard("purple"));
+		initialCards.add(new MemoryCard("purple"));
+		initialCards.add(new MemoryCard("skyblue"));
+		initialCards.add(new MemoryCard("skyblue"));
+		initialCards.add(new MemoryCard("white"));
+		initialCards.add(new MemoryCard("white"));
+		initialCards.add(new MemoryCard("yellow"));
+		initialCards.add(new MemoryCard("yellow"));
+
+		Collections.shuffle(initialCards);
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 3; j++) {
+				this.addCard(initialCards.get((i * 3) + j), i, j);
+
+			}
+		}
+
+	}
 	public void addCard(MemoryCard m, int x, int y) {
 		center.add(m);
 		m.setBounds((x * 120) + 10, (y * 125) + 10, cardSize, cardSize);

@@ -23,7 +23,17 @@ public class MemoryCard extends JPanel {
 		display.setBounds(0,0, 90, 90);
 		flipped = false;
 	}
-	
+	public MemoryCard(){
+		type = "test";
+		this.setLayout(null);
+		display = new JLabel();
+		this.add(display);
+		front = new ImageIcon(this.getClass().getResource(type + ".png"));
+		back = new ImageIcon(this.getClass().getResource("back.png"));
+		display.setIcon(back);
+		display.setBounds(0,0, 90, 90);
+		flipped = false;
+	}
 	public String getType() {
 		return type;
 	}

@@ -8,7 +8,6 @@ public class CPU implements AI{
 		score = 0;
 	}
 
-	
 
 	public MemoryCard[] getCpuMove(ArrayList<MemoryCard> allCards, HashMap<Coordinate, MemoryCard> cardMap,
 			ArrayList<Coordinate> coords) {

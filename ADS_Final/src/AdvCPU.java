@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AdvCPU extends CPU{
+public class AdvCPU extends CPU implements AI{
 	private HashMap<MemoryCard, Coordinate> knownCards;
 
 	public AdvCPU() {

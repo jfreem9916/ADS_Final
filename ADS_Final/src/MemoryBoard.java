@@ -20,7 +20,8 @@ public class MemoryBoard extends JFrame {
 	private static final long serialVersionUID = -6013876123920190103L;
 	private int width, height;
 	private int cardSize = 90;
-	private JPanel cpuSide, playerSide, center;
+	private JPanel center;
+	private Side cpuSide, playerSide;
 	private boolean playerCanMove;
 	private CPU cpu;
 	private ArrayList<MemoryCard> flippedCards;
@@ -29,6 +30,7 @@ public class MemoryBoard extends JFrame {
 	private HashMap<Coordinate, MemoryCard> cardMap;
 	private ArrayList<Coordinate> coords;
 	private HUD h;
+
 	public MemoryBoard() {
 		super("Memory");
 		this.setResizable(false);
@@ -40,25 +42,22 @@ public class MemoryBoard extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		String AI = JOptionPane.showInputDialog("Advanced AI(Y/N)?:");
-		if(AI.trim().equalsIgnoreCase("Y")){
+		if (AI != null && AI.trim().equalsIgnoreCase("Y")) {
 			cpu = new AdvCPU();
-		}
-		else{
+		} else {
 			cpu = new CPU();
 		}
 
 		playerScore = 0;
 
-		cpuSide = new JPanel();
+		cpuSide = new Side();
 		center = new JPanel();
-		playerSide = new JPanel();
+		playerSide = new Side();
 
-		cpuSide.setLayout(null);
 		center.setLayout(null);
-		playerSide.setLayout(null);
 
 		h = new HUD(playerScore, cpu.getScore());
-		
+
 		this.add(cpuSide);
 		this.add(center);
 		this.add(playerSide);
@@ -66,10 +65,7 @@ public class MemoryBoard extends JFrame {
 		center.setBounds(0, 149, 1200, 357);
 		playerSide.setBounds(0, 506, 1200, 169);
 
-		cpuSide.setBackground(Color.DARK_GRAY);
 		center.setBackground(Color.GRAY);
-		playerSide.setBackground(Color.WHITE);
-
 
 		playerCanMove = true;
 
@@ -132,7 +128,7 @@ public class MemoryBoard extends JFrame {
 
 	}
 
-	public void removeCardPair(MemoryCard m, MemoryCard m2) {
+	public void removeCardPair(MemoryCard m, MemoryCard m2, boolean isPlayer) {
 		center.remove(m);
 		center.remove(m2);
 		allCards.remove(m);
@@ -151,8 +147,14 @@ public class MemoryBoard extends JFrame {
 		cardMap.remove(toRemove2);
 		coords.remove(toRemove1);
 		coords.remove(toRemove2);
-		if(cpu instanceof AdvCPU){
+		if (cpu instanceof AdvCPU) {
 			((AdvCPU) cpu).clearCards(m, m2);
+		}
+		if (isPlayer) {
+			playerSide.addCard(m);
+
+		} else {
+			cpuSide.addCard(m);
 		}
 		center.repaint();
 
@@ -188,7 +190,7 @@ public class MemoryBoard extends JFrame {
 
 				myCard.setFlipped(true);
 				flippedCards.add(myCard);
-				if(cpu instanceof AdvCPU){
+				if (cpu instanceof AdvCPU) {
 					((AdvCPU) cpu).addCard(myCard, x, y);
 				}
 
@@ -205,7 +207,7 @@ public class MemoryBoard extends JFrame {
 
 					} else {
 						Timer t = new Timer();
-						t.schedule(new RemoveTask(), 1500);
+						t.schedule(new RemoveTask(true), 1500);
 						t.schedule(new ClearTask(), 1510);
 						t.schedule(new PlayerTask(), 1550);
 
@@ -219,9 +221,15 @@ public class MemoryBoard extends JFrame {
 	}
 
 	private class RemoveTask extends TimerTask {
+		boolean wasPlayer;
+
+		public RemoveTask(boolean wP) {
+			wasPlayer = wP;
+		}
+
 		@Override
 		public void run() {
-			removeCardPair(flippedCards.get(0), flippedCards.get(1));
+			removeCardPair(flippedCards.get(0), flippedCards.get(1), wasPlayer);
 		}
 	}
 
@@ -266,7 +274,7 @@ public class MemoryBoard extends JFrame {
 				t.schedule(new PlayerTask(), 2000);
 			} else {
 				Timer t = new Timer();
-				t.schedule(new RemoveTask(), 1500);
+				t.schedule(new RemoveTask(false), 1500);
 				t.schedule(new ClearTask(), 1510);
 				if (allCards.size() == 0 || cpu.getScore() > 7 || playerScore > 7) {
 					winGame();

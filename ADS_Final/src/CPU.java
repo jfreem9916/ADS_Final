@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class CPU{
+public class CPU implements AI{
 	protected int score;
 
 	public CPU() {

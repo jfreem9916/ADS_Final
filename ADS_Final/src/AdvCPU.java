@@ -22,7 +22,7 @@ public class AdvCPU extends CPU{
 		knownCards.remove(m2);
 
 	}
-
+	@Override
 	public MemoryCard[] getCpuMove(ArrayList<MemoryCard> allCards, HashMap<Coordinate, MemoryCard> cardMap,
 			ArrayList<Coordinate> coords) {
 		MemoryCard[] output = new MemoryCard[2];

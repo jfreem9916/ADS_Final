@@ -49,10 +49,12 @@ public class HUD extends JFrame {
 
 	}
 	public void updatePlayerScore(int i){
+		//Updates player text
 		playerHUD.setText("Your score: " + i);
 
 	}
 	public void updateCPUScore(int i){
+		//Updates cpu text
 		cpuHUD.setText("CPU score: " + i);
 
 	}

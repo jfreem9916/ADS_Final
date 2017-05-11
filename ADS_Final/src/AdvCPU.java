@@ -9,6 +9,8 @@ public class AdvCPU extends CPU implements AI{
 	}
 
 	public void addCard(MemoryCard m, int x, int y) {
+		//Gives computer a chance to memorize the location of a card
+		//Chance decreases as more cards are memorized
 		double chance = 1.0 / ((double)(knownCards.size() ^ 2) / 4 + 1);
 		double num = Math.random();
 
@@ -18,6 +20,7 @@ public class AdvCPU extends CPU implements AI{
 		}
 	}
 	public void clearCards(MemoryCard m, MemoryCard m2){
+		//Removes a card from being known if it is no longer on the board
 		knownCards.remove(m);
 		knownCards.remove(m2);
 
@@ -35,6 +38,7 @@ public class AdvCPU extends CPU implements AI{
 				knownIndices.add(i);
 			}
 		}
+		//If there is a set of known cards that match, find them and return them
 		for (int i = 0; i < knownTypes.size(); i++) {
 			for (int j = 0; j < knownTypes.size(); j++) {
 				String str1 = knownTypes.get(i);
@@ -49,7 +53,7 @@ public class AdvCPU extends CPU implements AI{
 				}
 			}
 		}
-
+		//Otherwise, pick two randomly selected unknown cards
 		int x1 = -1; 
 		int x2 = -1;
 		int y1 = -1;

@@ -20,6 +20,7 @@ public class Side extends JPanel {
 		displayOfCards = new ArrayList<MemoryCard>();
 	}
 	public void addCard(MemoryCard m){
+		//Stores a flipped card in the flipper's side
 		displayOfCards.add(m);
 		this.add(m);
 		m.setBounds((displayOfCards.size() * 90)+10, 10, 90 ,90);

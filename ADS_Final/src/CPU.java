@@ -11,6 +11,7 @@ public class CPU implements AI{
 
 	public MemoryCard[] getCpuMove(ArrayList<MemoryCard> allCards, HashMap<Coordinate, MemoryCard> cardMap,
 			ArrayList<Coordinate> coords) {
+		//Randomly select and return 2 cards to flip
 		MemoryCard[] output = new MemoryCard[2];
 		int x1 = -1; 
 		int x2 = -1;
@@ -45,9 +46,11 @@ public class CPU implements AI{
 		return output;
 	}
 	public int getScore(){
+		//Return the score
 		return score;
 	}
 	public void incScore(){
+		//Increment score
 		score++;
 	}
 }

@@ -1,5 +1,6 @@
 
 public class Coordinate {
+	//Represents the location of a card on the board in x, y
 	private int x,y;
 	public int getX() {
 		return x;

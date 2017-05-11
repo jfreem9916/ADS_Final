@@ -42,6 +42,7 @@ public class MemoryCard extends JPanel {
 	}
 	@Override
 	public boolean equals(Object o){
+		//Check if this is the same instance of the card
 		if(!(o instanceof MemoryCard)){
 			return false;
 		}
@@ -53,6 +54,7 @@ public class MemoryCard extends JPanel {
 	}
 
 	public void setFlipped(boolean b){
+		//Sets which side of the card is face up
 		flipped = b;
 		if(b){
 			display.setIcon(front);
@@ -66,6 +68,7 @@ public class MemoryCard extends JPanel {
 	}
 
 	public boolean matches(MemoryCard memoryCard) {
+		//Check if two cards are matching
 		if(memoryCard.getType().equalsIgnoreCase(type)){
 			return true;
 		}

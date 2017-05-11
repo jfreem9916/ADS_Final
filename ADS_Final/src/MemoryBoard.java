@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -41,6 +42,7 @@ public class MemoryBoard extends JFrame {
 		this.setLocation((1600 - width) / 2, (900 - height) / 2);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		//Ask what CPU user wants
 		String AI = JOptionPane.showInputDialog("Advanced AI(Y/N)?:");
 		if (AI != null && AI.trim().equalsIgnoreCase("Y")) {
 			cpu = new AdvCPU();
@@ -74,7 +76,8 @@ public class MemoryBoard extends JFrame {
 		cardMap = new HashMap<Coordinate, MemoryCard>();
 		coords = new ArrayList<Coordinate>();
 
-		ArrayList<MemoryCard> initialCards = new ArrayList<MemoryCard>();
+		//Creates a stack of cards and shuffles them, then places them on the board
+		Stack<MemoryCard> initialCards = new Stack<MemoryCard>();
 		initialCards.add(new MemoryCard("red"));
 		initialCards.add(new MemoryCard("red"));
 		initialCards.add(new MemoryCard("green"));
@@ -110,7 +113,7 @@ public class MemoryBoard extends JFrame {
 
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 3; j++) {
-				this.addCard(initialCards.get((i * 3) + j), i, j);
+				this.addCard(initialCards.pop(), i, j);
 
 			}
 		}
@@ -202,6 +205,7 @@ public class MemoryBoard extends JFrame {
 
 	}
 	public void addCard(MemoryCard m, int x, int y) {
+		//Places a card on the board at x, y
 		center.add(m);
 		m.setBounds((x * 120) + 10, (y * 125) + 10, cardSize, cardSize);
 		m.addMouseListener(new CardClick(m, x, y));
@@ -213,6 +217,7 @@ public class MemoryBoard extends JFrame {
 	}
 
 	public void removeCardPair(MemoryCard m, MemoryCard m2, boolean isPlayer) {
+		//Removes matched cards from board and updates CPU's knowledge
 		center.remove(m);
 		center.remove(m2);
 		allCards.remove(m);
@@ -245,6 +250,7 @@ public class MemoryBoard extends JFrame {
 	}
 
 	public boolean checkIfMatch(boolean isPlayer) {
+		//Check if the 2 flipped cards are matches or not, and update score
 		if (flippedCards.get(0).matches(flippedCards.get(1))) {
 			if (isPlayer) {
 				playerScore++;
@@ -257,8 +263,9 @@ public class MemoryBoard extends JFrame {
 		}
 		return false;
 	}
-
+	
 	private class CardClick extends MouseAdapter {
+		//Checks if card clicked, flip if it can/is allowed to be
 		private MemoryCard myCard;
 		private int x, y;
 
@@ -283,13 +290,14 @@ public class MemoryBoard extends JFrame {
 					boolean isMatched = checkIfMatch(true);
 
 					if (!isMatched) {
-
+						//If not match, let cpu go
 						Timer t = new Timer();
 						t.schedule(new FlipTask(), 1500);
 						t.schedule(new ClearTask(), 1510);
 						t.schedule(new CpuTask(), 2000);
 
 					} else {
+						//Let user go again if match
 						Timer t = new Timer();
 						t.schedule(new RemoveTask(true), 1500);
 						t.schedule(new ClearTask(), 1510);
@@ -303,7 +311,8 @@ public class MemoryBoard extends JFrame {
 			}
 		}
 	}
-
+	//Timer + task objects allow delays on actions such as putting cards face down again
+	//Allows user to see what cpu does
 	private class RemoveTask extends TimerTask {
 		boolean wasPlayer;
 
@@ -338,6 +347,7 @@ public class MemoryBoard extends JFrame {
 			MemoryCard[] move = cpu.getCpuMove(allCards, cardMap, coords);
 			move[0].setFlipped(true);
 			move[1].setFlipped(true);
+			/*
 			for (Coordinate c : coords) {
 				if (cardMap.get(c).equals(move[0])) {
 					System.out.println(move[0].getType() + ": " + c);
@@ -347,16 +357,18 @@ public class MemoryBoard extends JFrame {
 				}
 			}
 			System.out.println("=====================");
+			*/
 			flippedCards.add(move[0]);
 			flippedCards.add(move[1]);
 			boolean isMatched = checkIfMatch(false);
 			if (!isMatched) {
-
+				//If not a match, let player go
 				Timer t = new Timer();
 				t.schedule(new FlipTask(), 1500);
 				t.schedule(new ClearTask(), 1510);
 				t.schedule(new PlayerTask(), 2000);
 			} else {
+				//If matched, cpu goes again
 				Timer t = new Timer();
 				t.schedule(new RemoveTask(false), 1500);
 				t.schedule(new ClearTask(), 1510);
@@ -379,6 +391,7 @@ public class MemoryBoard extends JFrame {
 	}
 
 	public void winGame() {
+		//Display winner and end game
 		if (playerScore > cpu.getScore()) {
 			JOptionPane.showMessageDialog(null, "You win!", "Winner", JOptionPane.INFORMATION_MESSAGE);
 		} else if (cpu.getScore() > playerScore) {

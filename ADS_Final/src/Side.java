@@ -24,5 +24,8 @@ public class Side extends JPanel {
 		this.add(m);
 		m.setBounds((displayOfCards.size() * 90)+10, 10, 90 ,90);
 		m.setFlipped(true);
+		if(m.getMouseListeners().length > 0){
+			m.removeMouseListener(m.getMouseListeners()[0]);
+		}
 	}
 }
